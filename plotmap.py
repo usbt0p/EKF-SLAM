@@ -34,8 +34,9 @@ def plotMap(ls,ldt,hist,robot,mapsize):
         plt.arrow(*stateToArrow(state), head_width=0.5)
     plt.scatter(ls[:,0],ls[:,1], s=10, marker="s", color=(0,0,1))
     
-    for i in range(ldt.shape[2]):
-        plt.scatter(ldt[:,0,i], ldt[:,1,i], s=10, marker="s", color=(0,1,0))
+    if ldt is not None: # FIXME mandatory parameters should not be None...
+        for i in range(ldt.shape[2]):
+            plt.scatter(ldt[:,0,i], ldt[:,1,i], s=10, marker="s", color=(0,1,0))
     
     plt.xlim([-mapsize/2,mapsize/2])
     plt.ylim([-mapsize/2,mapsize/2])
@@ -84,7 +85,7 @@ def plotEstimate(mu, cov, robot, mapsize):
     plt.xlim([-mapsize/2,mapsize/2])
     plt.ylim([-mapsize/2,mapsize/2])
     plt.title('Observations and trajectory estimate')
-    plt.pause(0.1)
+    plt.pause(0.0001)
     
 def plotMeasurement(mu, cov, obs, n):
     a = plt.subplot(132, aspect='equal')
@@ -94,9 +95,9 @@ def plotMeasurement(mu, cov, obs, n):
         zx = mu[2*j+3]
         zy = mu[2*j+4]
         if j < n:
-            plt.plot([mu[0][0], zx], [mu[1][0], zy], color=(0,0,1))
+            plt.plot([mu[0][0], zx[0]], [mu[1][0], zy[0]], color=(0,0,1))
         else:
-            plt.plot([mu[0][0], zx], [mu[1][0], zy], color=(0,1,0))
+            plt.plot([mu[0][0], zx[0]], [mu[1][0], zy[0]], color=(0,1,0))
         
         landmark_cov = Ellipse(xy=[zx,zy], width=cov[2*j+3][2*j+3], height=cov[2*j+4][2*j+4], angle=0)
         landmark_cov.set_edgecolor((0,0,0))
